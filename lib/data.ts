@@ -198,6 +198,7 @@ export async function getTopProducts(limit = 5) {
     return {
       name: product?.name ?? "Unknown",
       sku: product?.sku ?? "",
+      price: product?.price ?? 0,          
       revenue: (item._sum.unitPrice ?? 0) * (item._sum.quantity ?? 1),
       units: item._sum.quantity ?? 0,
     };

@@ -3,6 +3,7 @@ import MetricCard from "@/components/dashboard/MetricCard";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import AIInsightsBanner from "@/components/dashboard/AIInsightsBanner";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { prisma } from "@/lib/prisma";
 
 const STATUS_STYLES: Record<string, string> = {
     DELIVERED: "bg-[var(--neon)]/10 text-[var(--neon)] border-[var(--neon)]/20",
@@ -14,10 +15,11 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
-    const [metrics, chartData, recentOrders] = await Promise.all([
+    const [metrics, chartData, recentOrders, latestOrder] = await Promise.all([
         getOverviewMetrics(),
         getRevenueChart(),
         getRecentOrders(8),
+        prisma.order.findFirst({ orderBy: { createdAt: "desc" }, select: { createdAt: true } }),
     ]);
 
     const METRIC_CARDS: {
@@ -60,7 +62,7 @@ export default async function OverviewPage() {
 
     return (
         <div className="flex flex-col gap-6">
-            <AIInsightsBanner />
+            <AIInsightsBanner refreshKey={latestOrder?.createdAt.getTime() ?? 0} />
 
             {/* Metric cards */}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">

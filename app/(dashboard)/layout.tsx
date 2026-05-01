@@ -1,6 +1,7 @@
 import Sidebar from "@/components/dashboard/Sidebar";
 import Topbar from "@/components/dashboard/Topbar";
 import ChatDrawer from "@/components/ai/ChatDrawer";
+import SimulatorProvider from "@/components/providers/SimulatorProvider";
 
 export default function DashboardLayout({
   children,
@@ -17,6 +18,7 @@ export default function DashboardLayout({
         </main>
       </div>
       <ChatDrawer />
+      <SimulatorProvider />
     </div>
   );
 }

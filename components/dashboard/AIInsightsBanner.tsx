@@ -1,46 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Robot, X } from "@phosphor-icons/react";
+import { Robot, X, ArrowsClockwise } from "@phosphor-icons/react";
 
-export default function AIInsightsBanner() {
+interface Props {
+  refreshKey: number;
+}
+
+export default function AIInsightsBanner({ refreshKey }: Props) {
   const [insight, setInsight] = useState("");
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState(false);
+  const cancelRef = useRef(false);
 
   useEffect(() => {
-    let cancelled = false;
+    cancelRef.current = true; // cancels any in-flight stream
 
-    async function fetchInsight() {
-      try {
-        const res = await fetch("/api/ai/insights");
-        if (!res.ok || !res.body) return;
+    const timer = setTimeout(() => {
+      cancelRef.current = false;
+      setInsight("");
+      setLoading(true);
+      setDismissed(false);
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let text = "";
+      fetch("/api/ai/insights", { cache: "no-store" })
+        .then(async (res) => {
+          if (!res.ok || !res.body) return;
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let text = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done || cancelRef.current) break;
+            const chunk = decoder.decode(value, { stream: true });
+            text = text + chunk;
+            const captured = text;
+            setInsight(captured);
+            setLoading(false);
+          }
+        })
+        .catch(() => setLoading(false));
+    }, 0);
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done || cancelled) break;
-          text += decoder.decode(value, { stream: true });
-          setInsight(text);
-          setLoading(false);
-        }
-      } catch {
-        setLoading(false);
-      }
-    }
-
-    fetchInsight();
-    return () => { cancelled = true; };
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      cancelRef.current = true;
+    };
+  }, [refreshKey]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {!dismissed && (
         <motion.div
+          key={refreshKey}
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8, height: 0, marginBottom: 0 }}
@@ -52,9 +64,16 @@ export default function AIInsightsBanner() {
           </div>
 
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-mono tracking-widest uppercase text-[var(--neon)] mb-1">
-              AI Insight
-            </p>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="text-[10px] font-mono tracking-widest uppercase text-[var(--neon)]">
+                AI Insight
+              </p>
+              {!loading && (
+                <span className="text-[10px] font-mono text-muted-foreground">
+                  · updated {new Date().toLocaleTimeString()}
+                </span>
+              )}
+            </div>
             {loading ? (
               <div className="flex gap-1 items-center h-4">
                 {[0, 1, 2].map((i) => (
@@ -71,12 +90,42 @@ export default function AIInsightsBanner() {
             )}
           </div>
 
-          <button
-            onClick={() => setDismissed(true)}
-            className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-          >
-            <X size={14} />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => {
+                setInsight("");
+                setLoading(true);
+                cancelRef.current = false;
+                fetch("/api/ai/insights", { cache: "no-store" })
+                  .then(async (res) => {
+                    if (!res.ok || !res.body) return;
+                    const reader = res.body.getReader();
+                    const decoder = new TextDecoder();
+                    let text = "";
+                    while (true) {
+                      const { done, value } = await reader.read();
+                      if (done || cancelRef.current) break;
+                      const chunk = decoder.decode(value, { stream: true });
+                      text = text + chunk;
+                      const captured = text;
+                      setInsight(captured);
+                      setLoading(false);
+                    }
+                  })
+                  .catch(() => setLoading(false));
+              }}
+              className="p-1.5 rounded-md text-muted-foreground hover:text-[var(--neon)] transition-colors"
+              title="Refresh insight"
+            >
+              <ArrowsClockwise size={13} />
+            </button>
+            <button
+              onClick={() => setDismissed(true)}
+              className="p-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X size={13} />
+            </button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

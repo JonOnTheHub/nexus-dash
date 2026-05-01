@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
     SquaresFour,
     ShoppingCart,
@@ -10,9 +10,12 @@ import {
     Users,
     Robot,
     SignOut,
+    List,
+    X,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 
 const NAV = [
     { href: "/", label: "Overview", icon: SquaresFour },
@@ -36,12 +39,11 @@ const item: Variants = {
     },
 };
 
-export default function Sidebar() {
+function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     const pathname = usePathname();
 
     return (
-        <aside className="fluted-glass flex flex-col w-[220px] shrink-0 min-h-[100dvh] border-r border-border px-3 py-6">
-            {/* Logo */}
+        <>
             <div className="px-3 mb-8">
                 <span className="font-mono text-lg font-bold tracking-widest text-neon uppercase">
                     Nexus
@@ -51,7 +53,6 @@ export default function Sidebar() {
                 </span>
             </div>
 
-            {/* Nav */}
             <motion.nav
                 variants={container}
                 initial="hidden"
@@ -64,6 +65,7 @@ export default function Sidebar() {
                         <motion.div key={href} variants={item}>
                             <Link
                                 href={href}
+                                onClick={onNavigate}
                                 className={cn(
                                     "group relative flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200",
                                     active
@@ -71,7 +73,6 @@ export default function Sidebar() {
                                         : "text-muted-foreground hover:text-foreground hover:bg-surface-raised"
                                 )}
                             >
-                                {/* glow on active */}
                                 {active && (
                                     <motion.span
                                         layoutId="nav-glow"
@@ -85,8 +86,6 @@ export default function Sidebar() {
                                     className="shrink-0 relative z-10"
                                 />
                                 <span className="relative z-10 font-medium">{label}</span>
-
-                                {/* left accent bar */}
                                 {active && (
                                     <motion.span
                                         layoutId="nav-bar"
@@ -99,7 +98,6 @@ export default function Sidebar() {
                 })}
             </motion.nav>
 
-            {/* Sign out */}
             <button
                 onClick={() => signOut({ callbackUrl: "/login" })}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-surface-raised transition-all duration-200 w-full"
@@ -107,6 +105,61 @@ export default function Sidebar() {
                 <SignOut size={17} />
                 <span className="font-medium">Sign out</span>
             </button>
-        </aside>
+        </>
+    );
+}
+
+export default function Sidebar() {
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    return (
+        <>
+            {/* Desktop sidebar */}
+            <aside className="fluted-glass hidden md:flex flex-col w-[220px] shrink-0 min-h-[100dvh] border-r border-border px-3 py-6">
+                <NavContent />
+            </aside>
+
+            {/* Mobile hamburger */}
+            <button
+                onClick={() => setMobileOpen(true)}
+                className="md:hidden fixed top-3.5 left-4 z-50 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-raised transition-all duration-200"
+            >
+                <List size={20} />
+            </button>
+
+            {/* Mobile backdrop */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setMobileOpen(false)}
+                        className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+                    />
+                )}
+            </AnimatePresence>
+
+            {/* Mobile drawer */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.aside
+                        initial={{ x: "-100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "-100%" }}
+                        transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                        className="md:hidden fixed top-0 left-0 z-50 h-[100dvh] w-[240px] fluted-glass border-r border-border flex flex-col px-3 py-6"
+                    >
+                        <button
+                            onClick={() => setMobileOpen(false)}
+                            className="absolute top-4 right-4 p-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            <X size={16} />
+                        </button>
+                        <NavContent onNavigate={() => setMobileOpen(false)} />
+                    </motion.aside>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

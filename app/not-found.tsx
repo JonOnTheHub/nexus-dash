@@ -37,7 +37,7 @@ export default function NotFound() {
                 {/* Glitchy 404 */}
                 <div className="relative">
                     <span
-                        className="font-mono font-bold text-[120px] leading-none text-neon select-none"
+                        className="font-orbitron font-bold text-[120px] leading-none text-neon select-none"
                         style={{ textShadow: "0 0 40px oklch(0.96 0.234 120.7 / 0.4)" }}
                     >
                         404

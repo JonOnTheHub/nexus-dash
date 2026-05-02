@@ -4,18 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
-    SquaresFour,
-    ShoppingCart,
-    Package,
-    Users,
-    Robot,
-    SignOut,
-    List,
-    X,
+    SquaresFour, ShoppingCart, Package, Users,
+    Robot, SignOut, X,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { signOut } from "next-auth/react";
-import { useState } from "react";
+import { useSidebar } from "@/components/providers/SidebarProvider";
 
 const NAV = [
     { href: "/", label: "Overview", icon: SquaresFour },
@@ -45,10 +39,10 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     return (
         <>
             <div className="px-3 mb-8">
-                <span className="font-mono text-lg font-bold tracking-widest text-neon uppercase">
+                <span className="font-orbitron text-lg font-bold tracking-widest text-neon uppercase">
                     Nexus
                 </span>
-                <span className="block text-[10px] text-muted-foreground tracking-[0.2em] uppercase mt-0.5">
+                <span className="block text-[10px] text-muted-foreground tracking-[0.2em] uppercase mt-0.5 font-mono">
                     Dashboard
                 </span>
             </div>
@@ -110,22 +104,14 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export default function Sidebar() {
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const { mobileOpen, closeMobile } = useSidebar();
 
     return (
         <>
-            {/* Desktop sidebar */}
+            {/* Desktop */}
             <aside className="fluted-glass hidden md:flex flex-col w-[220px] shrink-0 min-h-[100dvh] border-r border-border px-3 py-6">
                 <NavContent />
             </aside>
-
-            {/* Mobile hamburger */}
-            <button
-                onClick={() => setMobileOpen(true)}
-                className="md:hidden fixed top-3.5 left-4 z-50 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-raised transition-all duration-200"
-            >
-                <List size={20} />
-            </button>
 
             {/* Mobile backdrop */}
             <AnimatePresence>
@@ -134,7 +120,7 @@ export default function Sidebar() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setMobileOpen(false)}
+                        onClick={closeMobile}
                         className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
                     />
                 )}
@@ -151,12 +137,12 @@ export default function Sidebar() {
                         className="md:hidden fixed top-0 left-0 z-50 h-[100dvh] w-[240px] fluted-glass border-r border-border flex flex-col px-3 py-6"
                     >
                         <button
-                            onClick={() => setMobileOpen(false)}
+                            onClick={closeMobile}
                             className="absolute top-4 right-4 p-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors"
                         >
                             <X size={16} />
                         </button>
-                        <NavContent onNavigate={() => setMobileOpen(false)} />
+                        <NavContent onNavigate={closeMobile} />
                     </motion.aside>
                 )}
             </AnimatePresence>

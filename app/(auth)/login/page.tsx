@@ -73,7 +73,7 @@ export default function LoginPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1, type: "spring", stiffness: 120, damping: 18 }}
             >
-              <span className="font-mono text-2xl font-bold tracking-widest text-neon uppercase">
+              <span className="font-orbitron text-2xl font-bold tracking-widest text-neon uppercase">
                 Nexus
               </span>
               <span

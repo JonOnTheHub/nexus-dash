@@ -11,28 +11,28 @@ const randomFloat = (min: number, max: number) =>
 
 // Realistic first + last name pools
 const FIRST_NAMES = [
-  "Amara", "Kofi", "Zainab", "Emre", "Priya", "Lucas", "Hitomi", "Fatima",
+  "Amara", "Kofi", "Zainab", "Emre", "Priya", "Josiah", "Hitomi", "Fatima",
   "Marcus", "Ingrid", "Chen", "Yuki", "Omar", "Sofia", "Kwame", "Aisha",
-  "Dmitri", "Layla", "Thragg", "Nkechi", "Henry", "Elif", "Soren", "Adaeze",
+  "Dmitri", "Layla", "Thragg", "Nkechi", "Henry", "Emilia", "Soren", "Adaeze",
   "Henrik", "Yemi", "Cleo", "Tariq", "Ese", "Jide", "Astrid", "Babajide",
-  "Ibrahim", "Oge", "Luca", "Kimiko", "Mateo", "Zara", "Hassan",
-  "Amina", "Leo", "Anika", "Jasper", "Malik", "Esme", "Billy",
+  "Ibrahim", "Oge", "Luca", "Kimiko", "Mateo", "Zara", "Naomi",
+  "Amina", "Leo", "Anika", "James", "Malik", "Somi", "Billy",
   "Salma", "Arjun", "Freja", "Isak", "Nadia", "Oluwaseun",
   "Karim", "Elena", "Samir", "Ngozi", "Tunde", "Leila",
-  "Hugo", "Naomi", "Mark", "Farah"
+  "Hugo", "Naomi", "Mark", "Joshua","Yara", "Bola", "Sara", "Etuk", "Zain", "Sabrina",
 ];
 
 const LAST_NAMES = [
   "Osei", "Mensah", "Yusuf", "Demir", "Nair", "Ferreira", "Tanaka", "Webb",
-  "Holm", "Wei", "Nakamura", "Hassan", "Petrov", "Reyes", "Asante", "Müller",
-  "Johansson", "Adeyemi", "Okonkwo", "Singh", "Andersen", "Kimura", "Bakr",
-  "Diallo", "Eriksen", "Abubakar", "Itua", "Fernandez", "Okoro", "Patel",
-  "Garcia", "Silva", "Ibrahim", "Khan", "Ali", "Nguyen", "Hernandez",
+  "Holm", "Wei", "Nakamura", "Hassan", "Reznov", "Reyes", "Asante", "Müller",
+  "Johansson", "Adeyemi", "Onyeka", "Singh", "Andersen", "Kimura", "Bakr",
+  "Diallo", "Ajayi", "Abubakar", "Itua", "Erling", "Okoro", "Patel",
+  "Garcia", "Silva", "Ibrahim", "Khan", "Alli", "Nagasaki", "Hernandez",
   "Lopez", "Gonzalez", "Dangote", "Costa", "Rossi", "Bianchi",
   "Moreau", "Dubois", "Schmidt", "Kowalski", "Novak",
   "Popov", "Obi", "Suleiman", "Okafor", "Balogun",
   "Eze", "Chowdhury", "Rahman", "Sato", "Yamamoto",
-  "Park", "Choi"
+  "Park", "Choi", "Osaze", "Kumar", "Bond", "Carpenter", "Gupta", "Babalola", "Morris", "Murphy", "Rivera", "Cook", "Rogers", "Morgan", "Peterson", "Cooper", "Reed", "Bailey", "Bell", "Gomez", "Khalipha", "Howard", "Ward", "Rahman", "Diaz", "Atwell", "Wood", "Watson", "Brooks", "Anthony", "Cruise", "Reyes", "Cruz", "Hughes", "Remi", "Myers", "Long", "Fawemi",
 ];
 
 const CITIES = [
@@ -44,7 +44,7 @@ const CITIES = [
   "Dublin", "Lisbon", "Prague", "Warsaw", "Budapest",
   "Doha", "Riyadh", "Kuala Lumpur", "Maitama", "Jakarta",
   "Manila", "Seoul", "Beijing", "Hong Kong", "Sydney",
-  "Melbourne", "Auckland", "Vancouver", "Montreal"
+  "Melbourne", "Auckland", "Vancouver", "Montreal", "Chicago", "Houston", "Bali", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville", "Fort Worth", "Columbus", "Charlotte", "San Francisco",
 ];
 
 const STATUSES = [

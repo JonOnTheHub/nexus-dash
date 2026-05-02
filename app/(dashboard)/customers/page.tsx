@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getCustomers } from "@/lib/data";
 import CustomersTable from "@/components/dashboard/CustomersTable";
 

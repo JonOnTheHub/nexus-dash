@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getOverviewMetrics, getRevenueChart, getRecentOrders } from "@/lib/data";
 import MetricCard from "@/components/dashboard/MetricCard";
 import RevenueChart from "@/components/dashboard/RevenueChart";

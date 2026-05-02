@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getOrders } from "@/lib/data";
 import OrdersTable from "@/components/dashboard/OrdersTable";
 import Link from "next/link";

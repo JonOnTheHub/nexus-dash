@@ -5,35 +5,15 @@ import { useRouter } from "next/navigation";
 
 export default function SimulatorProvider() {
     const router = useRouter();
-    const started = useRef(false);
+    const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
-        if (started.current) return;
-        started.current = true;
-
-        // Start the simulator loop
-        fetch("/api/simulate/start", { method: "POST" }).catch(() => { });
-
-        // Connect to SSE stream for live refresh
-        const source = new EventSource("/api/simulate/stream");
-
-        source.onmessage = (e) => {
-            try {
-                const data = JSON.parse(e.data);
-                if (data.type === "tick") {
-                    router.refresh();
-                }
-            } catch {
-                // silent
-            }
-        };
-
-        source.onerror = () => {
-            source.close();
-        };
+        interval.current = setInterval(() => {
+            router.refresh();
+        }, 60000);
 
         return () => {
-            source.close();
+            if (interval.current) clearInterval(interval.current);
         };
     }, [router]);
 

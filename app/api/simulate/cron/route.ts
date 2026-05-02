@@ -1,10 +1,9 @@
 import { runSimulatorTick } from "@/lib/simulator";
+import { auth } from "@/lib/auth";
 
-export async function GET(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+export async function POST() {
+  const session = await auth();
+  if (!session) return new Response("Unauthorized", { status: 401 });
 
   const result = await runSimulatorTick();
   return Response.json(result);

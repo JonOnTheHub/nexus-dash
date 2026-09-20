@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Robot, X, ArrowsClockwise } from "@phosphor-icons/react";
 
@@ -12,40 +12,50 @@ export default function AIInsightsBanner({ refreshKey }: Props) {
   const [insight, setInsight] = useState("");
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState(false);
-  const cancelRef = useRef(false);
+
+  async function refresh() {
+    setInsight("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/ai/insights", { cache: "no-store" });
+      if (!res.ok) return;
+      const text = await res.text();
+      setInsight(text);
+    } catch {
+      // silent
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    cancelRef.current = true; // cancels any in-flight stream
+    const controller = new AbortController();
+    const { signal } = controller;
 
-    const timer = setTimeout(() => {
-      cancelRef.current = false;
+    async function init() {
       setInsight("");
-      setLoading(true);
       setDismissed(false);
+      setLoading(true);
+      try {
+        const res = await fetch("/api/ai/insights", {
+          cache: "no-store",
+          signal,
+        });
+        if (signal.aborted || !res.ok) return;
+        const text = await res.text();
+        if (!signal.aborted) {
+          setInsight(text);
+          setLoading(false);
+        }
+      } catch (e) {
+        if ((e as Error).name === "AbortError") return;
+        setLoading(false);
+      }
+    }
 
-      fetch("/api/ai/insights", { cache: "no-store" })
-        .then(async (res) => {
-          if (!res.ok || !res.body) return;
-          const reader = res.body.getReader();
-          const decoder = new TextDecoder();
-          let text = "";
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done || cancelRef.current) break;
-            const chunk = decoder.decode(value, { stream: true });
-            text = text + chunk;
-            const captured = text;
-            setInsight(captured);
-            setLoading(false);
-          }
-        })
-        .catch(() => setLoading(false));
-    }, 0);
+    init();
 
-    return () => {
-      clearTimeout(timer);
-      cancelRef.current = true;
-    };
+    return () => controller.abort();
   }, [refreshKey]);
 
   return (
@@ -57,15 +67,15 @@ export default function AIInsightsBanner({ refreshKey }: Props) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8, height: 0, marginBottom: 0 }}
           transition={{ type: "spring", stiffness: 120, damping: 18 }}
-          className="fluted-glass rounded-xl border border-[var(--neon)]/20 px-5 py-4 mb-6 flex items-start gap-3"
+          className="fluted-glass rounded-xl border border-(--neon)/20 px-5 py-4 mb-6 flex items-start gap-3"
         >
-          <div className="mt-0.5 p-1.5 rounded-md bg-[var(--neon)]/10 shrink-0">
-            <Robot size={15} weight="fill" className="text-[var(--neon)]" />
+          <div className="mt-0.5 p-1.5 rounded-md bg-(--neon)/10 shrink-0">
+            <Robot size={15} weight="fill" className="text-neon" />
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <p className="text-[10px] font-mono tracking-widest uppercase text-[var(--neon)]">
+              <p className="text-[10px] font-mono tracking-widest uppercase text-neon">
                 AI Insight
               </p>
               {!loading && (
@@ -79,7 +89,7 @@ export default function AIInsightsBanner({ refreshKey }: Props) {
                 {[0, 1, 2].map((i) => (
                   <motion.span
                     key={i}
-                    className="w-1 h-1 rounded-full bg-[var(--neon)]"
+                    className="w-1 h-1 rounded-full bg-neon"
                     animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
                   />
@@ -92,29 +102,8 @@ export default function AIInsightsBanner({ refreshKey }: Props) {
 
           <div className="flex items-center gap-1 shrink-0">
             <button
-              onClick={() => {
-                setInsight("");
-                setLoading(true);
-                cancelRef.current = false;
-                fetch("/api/ai/insights", { cache: "no-store" })
-                  .then(async (res) => {
-                    if (!res.ok || !res.body) return;
-                    const reader = res.body.getReader();
-                    const decoder = new TextDecoder();
-                    let text = "";
-                    while (true) {
-                      const { done, value } = await reader.read();
-                      if (done || cancelRef.current) break;
-                      const chunk = decoder.decode(value, { stream: true });
-                      text = text + chunk;
-                      const captured = text;
-                      setInsight(captured);
-                      setLoading(false);
-                    }
-                  })
-                  .catch(() => setLoading(false));
-              }}
-              className="p-1.5 rounded-md text-muted-foreground hover:text-[var(--neon)] transition-colors"
+              onClick={refresh}
+              className="p-1.5 rounded-md text-muted-foreground hover:text-neon transition-colors"
               title="Refresh insight"
             >
               <ArrowsClockwise size={13} />

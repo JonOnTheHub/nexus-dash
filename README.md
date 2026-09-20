@@ -1,38 +1,45 @@
 # Nexus Dash
 
-<<<<<<< HEAD
-An AI-powered e-commerce operations dashboard built as a production-grade MVP. Real-time data, three distinct AI surfaces, a live simulation engine, and a cyberpunk design system — built in **Next.js 16 App Router** with a full backend stack.
+An AI-powered e-commerce operations dashboard built as a production-grade MVP. Nexus Dash combines real-time commerce data, three distinct AI surfaces, a live simulation engine, and a cyberpunk-inspired design system — built with Next.js 16 App Router and a full backend stack.
 
-> **Note:** The live demo is currently offline — the Vercel Hobby plan's free function execution limits were exhausted by the simulation engine. The codebase is fully functional; clone and run locally or deploy with a paid Vercel plan to restore live operation.
+> **Note:** The live demo is currently offline because the Vercel Hobby plan's free function execution limits were exhausted by the simulation engine. The codebase is fully functional. Clone and run it locally, or deploy it with a paid Vercel plan to restore live operation.
 
 **Demo credentials (local):**
 
 * Email: `admin@nexus.com`
-* Password: No password required in MVP mode
+* Password: None required in MVP mode
 
 ---
 
 ## What It Does
 
-Nexus Dash gives e-commerce operators a single interface to monitor revenue, manage orders, track inventory, and get AI-generated insights — all updating in real time.
+Nexus Dash gives e-commerce operators a single interface to:
 
-A background simulation engine continuously generates orders, adjusts prices, and onboards new customers, keeping the dashboard live and the AI contextually aware.
+* Monitor revenue and business metrics
+* Manage and track orders
+* Monitor product inventory
+* Search and analyze customers
+* Get AI-generated operational insights
+* Chat with an AI assistant using live store context
+* Watch the dashboard update through a background simulation engine
+
+The simulation engine continuously generates realistic e-commerce activity, including orders, price changes, new customers, and inventory restocks. This keeps the dashboard live and gives the AI current store data to work with.
 
 ---
 
 ## Tech Stack
 
-| Layer             | Technology                                          |
-| ----------------- | --------------------------------------------------- |
-| **Framework**     | Next.js 16 (App Router, React Server Components)    |
-| **Frontend**      | React 19, Tailwind CSS v4, Framer Motion 12         |
-| **UI Primitives** | shadcn/ui (Radix Nova), Phosphor Icons, Recharts    |
-| **Typography**    | Orbitron (display), Geist (body), Geist Mono (data) |
-| **AI**            | Groq SDK — `openai/gpt-oss-120b`                    |
-| **Auth**          | NextAuth v5 — JWT strategy, credentials provider    |
-| **Database**      | PostgreSQL via Neon (serverless)                    |
-| **ORM**           | Prisma 7 with PrismaPg driver adapter               |
-| **Deployment**    | Vercel                                              |
+| Layer          | Technology                                          |
+| -------------- | --------------------------------------------------- |
+| Framework      | Next.js 16 (App Router, React Server Components)    |
+| Frontend       | React 19, Tailwind CSS v4, Framer Motion 12         |
+| UI Primitives  | shadcn/ui (Radix Nova), Phosphor Icons, Recharts    |
+| Typography     | Orbitron (display), Geist (body), Geist Mono (data) |
+| AI             | Groq SDK — `openai/gpt-oss-120b`                    |
+| Authentication | NextAuth v5 — JWT strategy, credentials provider    |
+| Database       | PostgreSQL via Neon (serverless)                    |
+| ORM            | Prisma 7 with PrismaPg driver adapter               |
+| Deployment     | Vercel                                              |
 
 ---
 
@@ -40,189 +47,156 @@ A background simulation engine continuously generates orders, adjusts prices, an
 
 ### Dashboard Pages
 
-* **Overview**
+#### Overview
 
-  * 4 animated metric cards: revenue, orders, customers, low stock
-  * 30-day revenue area chart
-  * Recent orders table
-  * AI insights banner
+* Four animated metric cards:
 
-* **Orders**
+  * Revenue
+  * Orders
+  * Customers
+  * Low stock
+* 30-day revenue area chart
+* Recent orders table
+* AI insights banner
+* Real-time updates from the simulation engine
 
-  * Filterable by status
-  * Paginated
-  * Expandable rows showing line items per order
+#### Orders
 
-* **Products**
+* Filter orders by status
+* Paginated order list
+* Expandable order rows
+* View line items for each order
 
-  * Category filter
-  * Animated stock-level bars
-  * Low-stock warnings
-  * Order count per SKU
+#### Products
 
-* **Customers**
+* Filter by category
+* Animated inventory level bars
+* Low-stock warnings
+* Order count per SKU
 
-  * Live search
-  * Spend bars
-  * Ranked by total spend
-  * Join date
+#### Customers
 
-* **AI Assistant**
+* Live customer search
+* Spend visualization
+* Customers ranked by total spend
+* Customer join dates
 
-  * Full-page chat
-  * Suggestion chips
-  * Transcript export
-  * Streaming responses
+#### AI Assistant
+
+* Full-page AI chat interface
+* Suggestion chips
+* Conversation history
+* Streaming responses
+* Transcript export to `.txt`
 
 ---
 
-## AI Surfaces
+## AI Integrations
 
-All AI features use **Groq — `openai/gpt-oss-120b`** and stream responses via `ReadableStream`.
+Nexus Dash uses Groq with `openai/gpt-oss-120b` across three distinct AI surfaces.
 
-### 1. Insights Banner
+### 1. AI Insights Banner
 
-On every dashboard load, Groq analyzes live store metrics and streams:
+Displayed across the dashboard.
 
-* A 2-sentence insight
+On each dashboard load, Groq analyzes live store metrics and generates:
+
+* A concise two-sentence business insight
 * An actionable recommendation
 
-The banner refreshes automatically on each data tick.
+The insight automatically refreshes after each simulator tick.
 
 ### 2. Chat Drawer
 
-A floating assistant accessible from any page.
+A floating AI assistant accessible from any dashboard page.
 
-Features include:
+The assistant receives contextual store information including:
+
+* Revenue changes
+* Top products and prices
+* Low-stock products
+* Order status breakdown
+* Top 10 customers by spend
+* Relevant operational metrics
+
+The system prompt enforces strict accuracy rules so the assistant does not fabricate store data.
+
+### 3. Full AI Chat Page
+
+A dedicated full-page chat experience using the same AI engine.
+
+Includes:
 
 * Conversation history
-* Full store context
-* Revenue data
-* Top products with prices
-* Low-stock products by name
-* Order breakdown
-* Customer counts
-* Structured list-based responses instead of walls of text
-
-### 3. Full Chat Page
-
-The full-page AI assistant uses the same engine and includes:
-
-* 8 suggestion chips
+* Eight suggestion chips
 * Streaming responses
-* Conversation history
-* Transcript export
+* Transcript export to `.txt`
+* Full store context
 
 ---
 
 ## Live Simulation Engine
 
-A background engine generates realistic e-commerce activity every **60 seconds**.
+Nexus Dash includes a background simulation engine that generates realistic e-commerce activity every 60 seconds.
 
-### Order Generation
+### Simulation Behavior
 
-Each simulation tick generates:
+| Event               | Behavior                                               |
+| ------------------- | ------------------------------------------------------ |
+| Orders              | 0 orders (15%), 1 order (60%), 2 orders (25%) per tick |
+| Items               | 1–2 products per order                                 |
+| Quantity            | Almost always quantity 1                               |
+| Price changes       | ±2% on a random product per tick                       |
+| Price limit         | Clamped to ±15% of the original price                  |
+| New customers       | 15% chance per tick                                    |
+| Customer generation | Name and city pools with email deduplication           |
+| Restocking          | 25% chance when a product reaches ≤5 units             |
+| Restock quantity    | 10–25 units                                            |
 
-* **0 orders:** 15% chance
-* **1 order:** 60% chance
-* **2 orders:** 25% chance
+### Why Client-Driven?
 
-Orders contain:
+The original architecture used Server-Sent Events and a Vercel cron job. Both approaches were removed for free-tier compatibility:
 
-* 1–2 products
-* Almost always quantity 1
+* Vercel Hobby SSE connections can drop after 10 seconds.
+* Vercel Hobby cron jobs are limited to once per day.
 
-### Price Variance
+The final implementation uses client-driven polling:
 
-Each tick:
+```text
+SimulatorProvider
+       │
+       │ every 60 seconds
+       ▼
+/api/simulate/cron
+       │
+       ▼
+Simulation Engine
+       │
+       ▼
+Database Update
+       │
+       ▼
+router.refresh()
+```
 
-* Randomly selects a product
-* Adjusts its price by ±2%
-* Clamps the price to ±15% of its original value
-
-### New Customers
-
-There is a **15% chance per tick** of generating a new customer.
-
-Customers are generated from:
-
-* Name pools
-* City pools
-
-Emails are deduplicated to prevent duplicate customers.
-
-### Restocking
-
-When a product reaches **5 units or fewer**, there is a **25% chance** of restocking.
-
-Each restock adds:
-
-* 10–25 units
-
-### Client-Driven Simulation
-
-The simulation is client-driven through 60-second polling.
-
-`SimulatorProvider`:
-
-1. Calls `/api/simulate/cron`
-2. Runs the simulation tick
-3. Calls `router.refresh()`
-4. Updates the dashboard with fresh server-rendered data
+This keeps the dashboard compatible with the Vercel deployment model while maintaining live behavior.
 
 ---
 
 ## Design System
 
-Nexus Dash uses a custom cyberpunk aesthetic built with Tailwind CSS v4 custom properties.
+Nexus Dash uses a custom cyberpunk visual system built around Tailwind CSS v4 and CSS custom properties.
 
-### Accent
+### Visual Language
 
-Neon orange:
-
-```text
-#FF5F1F
-```
-
-Equivalent design token:
-
-```text
-oklch(0.65 0.22 34)
-```
-
-### Fluted Glass
-
-The signature surface material uses:
-
-* Repeating vertical gradients
-* `backdrop-filter: blur`
-
-### Scanline Overlay
-
-A fixed `body::before` pseudo-element provides a CRT-style scanline texture at **1.8% opacity**.
-
-### Dark Mode
-
-Dark mode is forced by hardcoding:
-
-```html
-<html class="dark">
-```
-
-There is no theme toggle.
-
-### Motion
-
-Framer Motion uses spring physics with the house curve:
-
-```text
-stiffness: 120
-damping: 18
-```
-
-### Navigation Indicator
-
-The active navigation state uses a shared Framer Motion `layoutId` element to morph the indicator between navigation items.
+* **Primary accent:** Neon orange `#FF5F1F`
+* **OKLCH accent:** `oklch(0.65 0.22 34)`
+* **Fluted glass:** Repeating vertical gradients combined with `backdrop-filter: blur`
+* **Scanlines:** Fixed `body::before` CRT texture at 1.8% opacity
+* **Theme:** Dark mode forced via `class="dark"` on `<html>`
+* **Animations:** Framer Motion spring physics
+* **House spring curve:** `stiffness: 120, damping: 18`
+* **Navigation:** Shared `layoutId` indicator morphs between active states
 
 ---
 
@@ -231,39 +205,65 @@ The active navigation state uses a shared Framer Motion `layoutId` element to mo
 ```text
 nexus-dash/
 ├── app/
-│   ├── (auth)/              ← Login shell, separate layout tree
-│   ├── (dashboard)/         ← Dashboard shell, all protected routes
-│   │   ├── page.tsx         ← Overview (force-dynamic, SSR)
+│   ├── (auth)/
+│   │   └──              # Login shell, separate layout tree
+│   │
+│   ├── (dashboard)/
+│   │   ├── page.tsx     # Overview (force-dynamic, SSR)
 │   │   ├── orders/
 │   │   ├── products/
 │   │   ├── customers/
 │   │   └── ai-assistant/
+│   │
 │   └── api/
-│       ├── auth/            ← NextAuth handlers
-│       ├── ai/chat/         ← Groq streaming chat
-│       ├── ai/insights/     ← Groq streaming banner insight
-│       └── simulate/cron/   ← Simulation tick endpoint
+│       ├── auth/        # NextAuth handlers
+│       ├── ai/
+│       │   ├── chat/    # Groq chat completions
+│       │   └── insights/# Groq insights banner
+│       └── simulate/
+│           └── cron/    # Simulation tick endpoint
+│
 ├── components/
-│   ├── dashboard/           ← MetricCard, RevenueChart, OrdersTable,
-│   │                           ProductsTable, CustomersTable,
-│   │                           AIInsightsBanner, Sidebar, Topbar
-│   ├── ai/                  ← ChatDrawer, ChatFull, ChatMessage
-│   └── providers/           ← SimulatorProvider, SidebarProvider,
-│                               PageTransition
+│   ├── dashboard/
+│   │   ├── MetricCard
+│   │   ├── RevenueChart
+│   │   ├── OrdersTable
+│   │   ├── ProductsTable
+│   │   ├── CustomersTable
+│   │   ├── AIInsightsBanner
+│   │   ├── Sidebar
+│   │   └── Topbar
+│   │
+│   ├── ai/
+│   │   ├── ChatDrawer
+│   │   ├── ChatFull
+│   │   └── ChatMessage
+│   │
+│   └── providers/
+│       ├── SimulatorProvider
+│       ├── SidebarProvider
+│       └── PageTransition
+│
 ├── lib/
-│   ├── data.ts              ← All DB queries (data access layer)
-│   ├── simulator.ts         ← Tick engine
-│   ├── groq.ts              ← Groq singleton
-│   ├── prisma.ts            ← Prisma singleton with PrismaPg adapter
-│   ├── auth.ts              ← NextAuth config
-│   └── utils.ts             ← cn, formatCurrency, formatDate, etc.
+│   ├── data.ts          # Database queries / data access layer
+│   ├── simulator.ts     # Simulation engine
+│   ├── groq.ts          # Groq singleton
+│   ├── prisma.ts        # Prisma singleton + PrismaPg adapter
+│   ├── auth.ts          # NextAuth configuration
+│   └── utils.ts         # Shared utilities
+│
 ├── prisma/
-│   ├── schema.prisma        ← 7 models: User, Customer, Product,
-│   │                           Order, OrderItem, AILog, + auth tables
-│   ├── config.ts            ← Prisma 7 datasource config
-│   └── seed.ts              ← 12 customers, 15 products, ~100 orders
-└── types/
-    └── index.ts             ← Shared TypeScript types
+│   ├── schema.prisma    # Database schema
+│   ├── config.ts        # Prisma 7 datasource configuration
+│   └── seed.ts          # Database seed data
+│
+├── types/
+│   └── index.ts         # Shared TypeScript types
+│
+├── .env.example
+├── next.config.ts
+├── package.json
+└── README.md
 ```
 
 ---
@@ -272,92 +272,83 @@ nexus-dash/
 
 ### React Server Components First
 
-Data fetching happens server-side before anything reaches the browser.
+Data fetching happens server-side before data reaches the browser.
 
-Client components handle only:
+Client components are responsible only for interactive behavior such as:
 
-* Interactivity
 * Animations
-* Streaming AI
+* AI responses
 * Real-time state
+* User interactions
 
-Pages are marked `force-dynamic` to bypass Vercel's edge cache and ensure `router.refresh()` triggers a real server re-render.
+Dashboard pages are marked `force-dynamic` to bypass Vercel's edge cache. This ensures that `router.refresh()` triggers a fresh server render with current database data.
 
 ### Prisma 7 Adapter Pattern
 
 Prisma 7 removed the `url` field from `schema.prisma`.
 
-The datasource URL now lives in:
-
-```text
-prisma.config.ts
-```
-
-and is passed through a `PrismaPg` pool adapter.
+The database connection is now configured through `prisma.config.ts` and passed to Prisma through a `PrismaPg` pool adapter.
 
 The same adapter pattern is used in:
 
 * `lib/prisma.ts`
 * `prisma/seed.ts`
 
-### Streaming AI
+### AI Model Configuration
 
-All three AI surfaces use:
+Nexus Dash uses `openai/gpt-oss-120b` through Groq.
+
+The insights endpoint uses:
 
 ```text
-ReadableStream
+stream: false
+max_tokens: 1024
 ```
 
-with a `getReader()` loop on the client.
-
-Text accumulates in a `let` variable and is captured per chunk to avoid React Compiler complaints about closure mutation.
-
-The insights banner ties its `refreshKey` prop to the latest order's `createdAt` timestamp — a pure, stable value that changes only when new data exists.
+The larger token budget is intentional because the model is a reasoning model. Earlier attempts using `max_tokens: 120` resulted in `finish_reason: length` with empty `content` because the model exhausted its token budget during reasoning before producing the final response.
 
 ### Client-Driven Simulation
 
-The original design used:
+The initial implementation used:
 
 * Server-Sent Events
-* A Vercel cron job
+* Vercel cron jobs
 
-Both were dropped because:
+Both were removed in favor of client-driven polling.
 
-* SSE connections drop at 10s on Vercel Hobby
-* Vercel Hobby crons are limited to once daily
-
-The final architecture uses:
-
-```text
-SimulatorProvider
-        │
-        ▼
-60-second polling
-        │
-        ▼
-/api/simulate/cron
-        │
-        ▼
-Simulation tick
-        │
-        ▼
-router.refresh()
-```
+`SimulatorProvider` polls `/api/simulate/cron` every 60 seconds, executes a simulation tick, and calls `router.refresh()` to update the dashboard.
 
 ### Shared Sidebar State
 
-`SidebarProvider` lifts mobile open/close state above both `Sidebar` and `Topbar`.
+`SidebarProvider` manages mobile sidebar state above both the `Sidebar` and `Topbar`.
 
-This allows the hamburger button in the topbar to control the sidebar drawer without:
+This allows the hamburger button in the topbar to control the sidebar drawer without prop drilling.
 
-* Prop drilling
-* Sibling communication hacks
+### `AUTH_URL` Development Configuration
+
+During local development, `.env.local` must contain:
+
+```env
+AUTH_URL=http://localhost:3000
+```
+
+If `AUTH_URL` points to the production deployment, local requests can silently redirect to the deployed Vercel application. This can make local debugging appear as though the production build is running.
 
 ---
 
-## Local Development
+## Getting Started
 
-### 1. Clone
+### Prerequisites
+
+You'll need:
+
+* Node.js
+* PostgreSQL database
+* Groq API key
+
+Neon is recommended for PostgreSQL.
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/JonOnTheHub/nexus-dash.git
@@ -370,7 +361,7 @@ cd nexus-dash
 npm install
 ```
 
-### 3. Configure Environment
+### 3. Configure Environment Variables
 
 Copy the example environment file:
 
@@ -378,16 +369,16 @@ Copy the example environment file:
 cp .env.example .env.local
 ```
 
-Then fill in:
+Then configure the required variables:
 
 ```env
 DATABASE_URL=
 AUTH_SECRET=
-AUTH_URL=
+AUTH_URL=http://localhost:3000
 GROQ_API_KEY=
 ```
 
-### 4. Set Up the Database
+### 4. Initialize the Database
 
 Generate the Prisma client:
 
@@ -395,7 +386,7 @@ Generate the Prisma client:
 npx prisma generate
 ```
 
-Push the schema:
+Push the schema to your database:
 
 ```bash
 npx prisma db push
@@ -406,6 +397,12 @@ Seed the database:
 ```bash
 npx prisma db seed
 ```
+
+The seed creates approximately:
+
+* 12 customers
+* 15 products
+* 100 orders
 
 ### 5. Start the Development Server
 
@@ -419,7 +416,7 @@ Open:
 http://localhost:3000
 ```
 
-Log in with:
+Log in using:
 
 ```text
 admin@nexus.com
@@ -431,237 +428,39 @@ No password is required in MVP mode.
 
 ## Environment Variables
 
-Create a `.env.local` file with the following:
+| Variable       | Description                    |
+| -------------- | ------------------------------ |
+| `DATABASE_URL` | PostgreSQL connection string   |
+| `AUTH_SECRET`  | Random secret used by NextAuth |
+| `AUTH_URL`     | Application URL                |
+| `GROQ_API_KEY` | Groq API key                   |
+
+Example:
 
 ```env
-DATABASE_URL=       # PostgreSQL connection string (Neon recommended)
-AUTH_SECRET=        # Random string — openssl rand -base64 32
-AUTH_URL=           # http://localhost:3000 (dev) or production URL
-GROQ_API_KEY=       # From console.groq.com
+DATABASE_URL="postgresql://..."
+AUTH_SECRET="your-random-secret"
+AUTH_URL="http://localhost:3000"
+GROQ_API_KEY="gsk_..."
 ```
 
-### Variable Reference
-
-| Variable       | Description                  |
-| -------------- | ---------------------------- |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `AUTH_SECRET`  | Secret used by NextAuth      |
-| `AUTH_URL`     | Application URL              |
-| `GROQ_API_KEY` | Groq API authentication key  |
-=======
-An AI-powered e-commerce operations dashboard built as a production-grade MVP. Real-time data, three distinct AI surfaces, a live simulation engine, and a cyberpunk design system — built in Next.js 16 App Router with a full backend stack.
-
-**Live demo:** [nexusdash-beta.vercel.app](https://nexusdash-beta.vercel.app)
-
-**Demo credentials:** `admin@nexus.com` (no password required in MVP mode)
-
----
-
-## What It Does
-
-Nexus Dash gives e-commerce operators a single interface to monitor revenue, manage orders, track inventory, and get AI-generated insights — all updating in real time.
-
-A background simulation engine continuously generates orders, adjusts prices, and onboards new customers, keeping the dashboard live and the AI contextually aware.
-
----
-
-## Tech Stack
-
-| Layer         | Technology                                          |
-| ------------- | --------------------------------------------------- |
-| Framework     | Next.js 16 (App Router, React Server Components)    |
-| Frontend      | React 19, Tailwind CSS v4, Framer Motion 12         |
-| UI Primitives | shadcn/ui (Radix Nova), Phosphor Icons, Recharts    |
-| Typography    | Orbitron (display), Geist (body), Geist Mono (data) |
-| AI            | Groq SDK — `llama-3.3-70b-versatile`                |
-| Auth          | NextAuth v5 — JWT strategy, credentials provider    |
-| Database      | PostgreSQL via Neon (serverless)                    |
-| ORM           | Prisma 7 with PrismaPg driver adapter               |
-| Deployment    | Vercel (free tier)                                  |
-
----
-
-## Features
-
-### Dashboard Pages
-
-* **Overview** — 4 animated metric cards (revenue, orders, customers, low stock), 30-day revenue area chart, recent orders table, AI insights banner
-* **Orders** — filterable by status, paginated, expandable rows showing line items per order
-* **Products** — category filter, animated stock level bars, low stock warnings, order count per SKU
-* **Customers** — live search, spend bars, ranked by total spend, join date
-* **AI Assistant** — full-page chat with suggestion chips, export transcript, streaming responses
-
-### AI Surfaces (Groq)
-
-Three distinct AI integrations, all streaming via `ReadableStream`:
-
-1. **Insights Banner** — on every dashboard load, Groq analyzes live store metrics and streams a 2-sentence insight with an actionable recommendation. Refreshes automatically on each data tick.
-2. **Chat Drawer** — floating assistant accessible from any page. Maintains conversation history, has full store context (revenue, top products with prices, low stock by name, order breakdown, customer counts). Formats responses as structured lists, not walls of text.
-3. **Full Chat Page** — same engine in a full-page layout with 8 suggestion chips and transcript export.
-
-### Live Simulation Engine
-
-A background engine generates realistic e-commerce activity every 60 seconds:
-
-* **0 orders** — 15% chance
-* **1 order** — 60% chance
-* **2 orders** — 25% chance
-* 1–2 products per order, almost always quantity 1
-* **Price variance** — ±2% on a random product per tick, clamped to ±15% of original
-* **New customers** — 15% chance per tick, generated from name/city pools and deduplicated by email
-* **Restock** — 25% chance when any product hits ≤5 units, adding 10–25 units
-* **Client-driven** via 60-second polling — compatible with Vercel free tier
-
----
-
-## Design System
-
-Custom cyberpunk aesthetic built on Tailwind v4 CSS custom properties:
-
-* **Accent** — neon orange `#FF5F1F` (`oklch(0.65 0.22 34)`) throughout
-* **Fluted glass** — signature surface material using repeating vertical gradients + `backdrop-filter: blur`
-* **Scanline overlay** — fixed `body::before` CRT texture at 1.8% opacity
-* **Dark mode forced** — `class="dark"` hardcoded on `<html>`, no toggle
-* **Spring physics** — Framer Motion with `stiffness: 120, damping: 18` as the house curve
-* **`layoutId` nav indicator** — single shared element morphs between active states
-
----
-
-## Architecture
-
-```text
-nexus-dash/
-├── app/
-│   ├── (auth)/              ← Login shell, separate layout tree
-│   ├── (dashboard)/         ← Dashboard shell, all protected routes
-│   │   ├── page.tsx         ← Overview (force-dynamic, SSR)
-│   │   ├── orders/
-│   │   ├── products/
-│   │   ├── customers/
-│   │   └── ai-assistant/
-│   └── api/
-│       ├── auth/            ← NextAuth handlers
-│       ├── ai/chat/         ← Groq streaming chat
-│       ├── ai/insights/     ← Groq streaming banner insight
-│       └── simulate/cron/   ← Simulation tick endpoint
-├── components/
-│   ├── dashboard/           ← MetricCard, RevenueChart, OrdersTable,
-│   │                           ProductsTable, CustomersTable,
-│   │                           AIInsightsBanner, Sidebar, Topbar
-│   ├── ai/                  ← ChatDrawer, ChatFull, ChatMessage
-│   └── providers/           ← SimulatorProvider, SidebarProvider,
-│                               PageTransition
-├── lib/
-│   ├── data.ts              ← All DB queries (data access layer)
-│   ├── simulator.ts         ← Tick engine
-│   ├── groq.ts              ← Groq singleton
-│   ├── prisma.ts            ← Prisma singleton with PrismaPg adapter
-│   ├── auth.ts              ← NextAuth config
-│   └── utils.ts             ← cn, formatCurrency, formatDate, etc.
-├── prisma/
-│   ├── schema.prisma        ← 7 models: User, Customer, Product,
-│   │                           Order, OrderItem, AILog, + auth tables
-│   ├── config.ts            ← Prisma 7 datasource config
-│   └── seed.ts              ← 12 customers, 15 products, ~100 orders
-└── types/index.ts           ← Shared TypeScript types
-```
-
----
-
-## Key Engineering Decisions
-
-### React Server Components First
-
-Data fetching happens server-side before anything reaches the browser. Client components handle only interactivity: animations, streaming AI, and real-time state.
-
-Pages are marked `force-dynamic` to bypass Vercel's edge cache and ensure `router.refresh()` triggers a real server re-render.
-
-### Prisma 7 Adapter Pattern
-
-Prisma 7 removed the `url` field from `schema.prisma`. The datasource URL now lives in `prisma.config.ts` and is passed via a `PrismaPg` pool adapter.
-
-The same adapter pattern is used in both the app (`lib/prisma.ts`) and the seed script (`prisma/seed.ts`).
-
-### Streaming AI
-
-All three AI surfaces use `ReadableStream` with a `getReader()` loop on the client.
-
-Text accumulates in a `let` variable and is captured per chunk to avoid React compiler complaints about closure mutation.
-
-The insights banner ties its `refreshKey` prop to the latest order's `createdAt` timestamp — a pure, stable value that changes only when new data exists.
-
-### Client-Driven Simulation
-
-The original design used Server-Sent Events and a Vercel cron job. Both were dropped for free-tier compatibility.
-
-SSE connections drop at 10 seconds on Vercel Hobby, while crons are limited to once daily.
-
-The final architecture uses `SimulatorProvider` to:
-
-1. Poll `/api/simulate/cron` every 60 seconds.
-2. Run the simulation tick.
-3. Call `router.refresh()` to update server-rendered data.
-
-### Shared Sidebar State
-
-`SidebarProvider` lifts mobile open/close state above both `Sidebar` and `Topbar`, allowing the hamburger in the topbar to control the sidebar drawer without prop drilling or sibling communication hacks.
-
----
-
-## Local Development
+Generate an `AUTH_SECRET` with:
 
 ```bash
-# Clone
-git clone https://github.com/JonOnTheHub/nexus-dash.git
-cd nexus-dash
-
-# Install
-npm install
-
-# Environment
-cp .env.example .env.local
-# Fill in: DATABASE_URL, AUTH_SECRET, AUTH_URL, GROQ_API_KEY
-
-# Database
-npx prisma generate
-npx prisma db push
-npx prisma db seed
-
-# Dev server
-npm run dev
+openssl rand -base64 32
 ```
 
-Open `http://localhost:3000` and log in with `admin@nexus.com`.
-
----
-
-## Environment Variables
-
-```bash
-DATABASE_URL=       # PostgreSQL connection string (Neon recommended)
-AUTH_SECRET=        # Random string — openssl rand -base64 32
-AUTH_URL=           # http://localhost:3000 (dev) or production URL
-GROQ_API_KEY=       # From console.groq.com
-```
->>>>>>> 0c6c73177f6dedba5b53bc30819a657ca2c25dbc
+> **Important:** Use `http://localhost:3000` for `AUTH_URL` during local development. Use your production URL when deploying.
 
 ---
 
 ## Deployment
 
-<<<<<<< HEAD
-Nexus Dash is deployable on **Vercel**.
+Nexus Dash is deployable on Vercel.
 
-Add all four environment variables to the Vercel project before deploying.
+Before deploying, configure all required environment variables in the Vercel project settings.
 
-The build script runs Prisma generation before the Next.js build:
-=======
-Nexus Dash is deployed on Vercel.
-
-Add all four environment variables in the Vercel dashboard before deploying.
-
-The build script runs `prisma generate` before `next build`:
->>>>>>> 0c6c73177f6dedba5b53bc30819a657ca2c25dbc
+The production build runs Prisma generation before the Next.js build:
 
 ```json
 {
@@ -671,39 +470,33 @@ The build script runs `prisma generate` before `next build`:
 }
 ```
 
-<<<<<<< HEAD
-### Free Tier Note
+### Vercel Hobby Consideration
 
-The simulation engine uses client-driven polling.
+The simulation engine uses client-driven polling. Sustained traffic can exhaust the function execution quota on Vercel Hobby.
 
-On Vercel Hobby, sustained traffic can exhaust the included function execution quota.
+For a persistent live deployment, use either:
 
-For a persistent live demo, use:
-
-* **Vercel Pro**, or
+* Vercel Pro
 * A self-hosted Node.js environment
 
-=======
->>>>>>> 0c6c73177f6dedba5b53bc30819a657ca2c25dbc
 ---
 
 ## Database Schema
 
-<<<<<<< HEAD
-Nexus Dash contains **7 commerce/auth models across two domains**, with the authentication domain using the standard NextAuth model set.
-=======
-Seven commerce/auth models are used across two domains.
->>>>>>> 0c6c73177f6dedba5b53bc30819a657ca2c25dbc
+The database contains two main domains: authentication and commerce.
 
-### Auth
+### Authentication
+
+NextAuth models:
 
 * `User`
 * `Account`
 * `Session`
 * `VerificationToken`
 
-<<<<<<< HEAD
 ### Commerce
+
+Commerce models:
 
 * `Customer`
 * `Product`
@@ -711,30 +504,19 @@ Seven commerce/auth models are used across two domains.
 * `OrderItem`
 * `AILog`
 
-### Enums
+Enums include:
 
-**Product categories:**
+* `Category`
+* `OrderStatus`
 
-```text
-Category
-```
-
-**Order statuses:**
+### Relationships
 
 ```text
-OrderStatus
-```
-
-### Relations
-
-```text
-Order
-  │
-  ├── Customer
-  │
-  └── OrderItem
-        │
-        └── Product
+Customer
+   │
+   └──< Order
+          │
+          └──< OrderItem >── Product
 ```
 
 Specifically:
@@ -745,47 +527,18 @@ Specifically:
 
 ---
 
-## Project Highlights
+## Project Structure
 
-Nexus Dash combines:
-
-* ⚡ Next.js 16 App Router
-* ⚛️ React Server Components
-* 🧠 Groq-powered AI
-* 📡 Streaming AI responses
-* 📊 Real-time dashboard analytics
-* 🛒 E-commerce simulation
-* 🗄️ PostgreSQL + Prisma 7
-* 🔐 NextAuth v5 authentication
-* 🎨 Custom cyberpunk design system
-* 🌀 Framer Motion animations
-* ☁️ Vercel deployment
-
-The result is a production-oriented e-commerce operations dashboard that combines live business data, autonomous simulation, and contextual AI assistance in a single interface.
-=======
-These follow the NextAuth v5 standard.
-
-### Commerce
-
-* `Customer`
-* `Product` — with `Category` enum
-* `Order` — with `OrderStatus` enum
-* `OrderItem`
-* `AILog`
-
-### Relations
-
-* `Order` → `Customer` — many-to-one
-* `Order` → `OrderItem` — one-to-many
-* `OrderItem` → `Product` — many-to-one
+| Directory     | Purpose                                                     |
+| ------------- | ----------------------------------------------------------- |
+| `app/`        | Routes, layouts, pages, and API endpoints                   |
+| `components/` | Dashboard, AI, and shared UI components                     |
+| `lib/`        | Database, authentication, AI, simulation, and utility logic |
+| `prisma/`     | Schema, configuration, and seed data                        |
+| `types/`      | Shared TypeScript types                                     |
 
 ---
 
-## Built By
+## License
 
-**Jon Osaghae** — fullstack developer specialising in AI integration and intelligent internal systems.
-
-* [LinkedIn](https://linkedin.com/in/jon-osaghae)
-* [GitHub Repository](https://github.com/JonOnTheHub/nexus-dash)
-* [Live Demo](https://nexusdash-beta.vercel.app)
->>>>>>> 0c6c73177f6dedba5b53bc30819a657ca2c25dbc
+This project is provided as-is for demonstration and development purposes.

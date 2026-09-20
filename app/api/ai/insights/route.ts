@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
+
 export async function GET() {
   const session = await auth();
   if (!session) return new Response("Unauthorized", { status: 401 });
@@ -13,35 +14,34 @@ export async function GET() {
     getTopProducts(3),
   ]);
 
-  const prompt = `You are an AI analyst for an e-commerce dashboard. Given these store metrics for the last 30 days, write exactly 2 concise sentences highlighting the most important insight and one actionable recommendation. Be specific with numbers. No preamble.
+  const prompt = `You are an AI analyst for an e-commerce dashboard. Respond immediately with exactly 2 sentences. No thinking, no reasoning, no preamble. First sentence: the most important insight with specific numbers. Second sentence: one actionable recommendation with specific numbers. Plain text only.
 
-  Metrics:
-  - Revenue: $${metrics.revenue.toFixed(0)} (${metrics.revenueDelta > 0 ? "+" : ""}${metrics.revenueDelta}% vs previous 30 days)
-  - Orders: ${metrics.orders} (${metrics.ordersDelta > 0 ? "+" : ""}${metrics.ordersDelta}% vs previous 30 days)
-  - Total customers: ${metrics.customers}, ${metrics.newCustomers} new this month
-  - Low stock products: ${metrics.lowStock}
-  - Top products: ${topProducts.map((p) => `${p.name} ($${p.revenue.toFixed(0)})`).join(", ")}`;
+Metrics:
+- Revenue: $${metrics.revenue.toFixed(0)} (${metrics.revenueDelta > 0 ? "+" : ""}${metrics.revenueDelta}% vs previous 30 days)
+- Orders: ${metrics.orders} (${metrics.ordersDelta > 0 ? "+" : ""}${metrics.ordersDelta}% vs previous 30 days)
+- Customers: ${metrics.customers} total, ${metrics.newCustomers} new this month
+- Low stock products: ${metrics.lowStock}
+- Top products: ${topProducts.map((p) => `${p.name} ($${p.revenue.toFixed(0)} revenue, ${p.units} units)`).join(", ")}`;
 
-  const stream = await groq.chat.completions.create({
-    model: GROQ_MODEL,
-    max_tokens: 120,
-    stream: true,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const encoder = new TextEncoder();
-
-  const readable = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of stream) {
-        const text = chunk.choices[0]?.delta?.content ?? "";
-        if (text) controller.enqueue(encoder.encode(text));
-      }
-      controller.close();
+  const completion = await groq.chat.completions.create({
+  model: GROQ_MODEL,
+  max_tokens: 1024,
+  stream: false,
+  messages: [
+    {
+      role: "user",
+      content: prompt,
     },
-  });
+  ],
+});
 
-  return new Response(readable, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  const text = completion.choices[0]?.message?.content ?? "";
+  
+  return new Response(text, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "Pragma": "no-cache",
+    },
   });
 }
